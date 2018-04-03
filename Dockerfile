@@ -3,6 +3,8 @@
 #FROM resin/rpi-raspbian:latest
 FROM arm32v7/ubuntu
 
+RUN export debian_frontend=noninteractive
+
 # Get system up to date and install deps.
 RUN apt-get update; apt-get -y upgrade; apt-get --yes install \
     apt-transport-https \
