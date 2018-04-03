@@ -4,14 +4,14 @@ pipeline {
         pollSCM 'H/2 * * * *'
     }
     stages {
+        stage('Login') {
+            steps {
+                sh 'echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin'
+            }
+        }
         stage('Build') {
             steps {
                 sh 'sh build.sh'
-            }
-        }
-        stage('Login') {
-            steps {
-                sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
             }
         }
         stage('Tag') {
