@@ -21,15 +21,16 @@ RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | te
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 
 # Setup docker repo
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
-    echo "deb [arch=armhf] https://download.docker.com/linux/debian \
-    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+#RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
+#    echo "deb [arch=armhf] https://download.docker.com/linux/debian \
+#    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+RUN curl https://get.docker.com/ | sh -s
 
 # Make sure the Oracle Java 8 license is pre-accepted, and install Java 8 + Docker
 RUN echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections  && \
     echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections  && \
     apt-get update && \
-    apt-get --yes install oracle-java8-installer docker-ce ; apt-get clean
+    apt-get --yes install oracle-java8-installer ; apt-get clean
 
 ENV JENKINS_HOME /usr/local/jenkins
 
@@ -38,6 +39,9 @@ RUN useradd --no-create-home --shell /bin/sh jenkins
 RUN chown -R jenkins:jenkins /usr/local/jenkins/
 ADD http://mirrors.jenkins-ci.org/war-stable/latest/jenkins.war /usr/local/jenkins.war
 RUN chmod 644 /usr/local/jenkins.war
+
+
+RUN usermod -aG docker jenkins
 
 ENTRYPOINT ["/usr/bin/java", "-jar", "/usr/local/jenkins.war"]
 EXPOSE 8080
