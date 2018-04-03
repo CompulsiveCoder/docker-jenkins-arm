@@ -9,6 +9,11 @@ pipeline {
                 sh 'sh build.sh'
             }
         }
+        stage('Login') {
+            steps {
+                sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+            }
+        }
         stage('Tag') {
             steps {
                 sh 'sh tag.sh'
