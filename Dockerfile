@@ -12,7 +12,6 @@ RUN apt-get update; apt-get -y upgrade; apt-get --yes install \
     gnupg2 \
     software-properties-common \ 
     libapparmor-dev && \
-    sshpass && \
     apt-get clean && apt-get autoremove -q && \
     rm -rf /var/lib/apt/lists/* /usr/share/doc /usr/share/man /tmp/*
 
@@ -22,7 +21,7 @@ RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" | te
     apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 
 # Setup docker repo
-RUN curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add - && \
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
     echo "deb [arch=armhf] https://download.docker.com/linux/debian \
     $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
